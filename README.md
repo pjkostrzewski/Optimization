@@ -1,0 +1,2 @@
+# Optimization
+Gauss-Seidel method 
