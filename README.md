@@ -16,11 +16,11 @@ python3 parser.py
 ```
 
 ## Application view
-![Application](gs1.png)
-![Application](gs2.png)
-![Application](gs3.png)
-![Application](gs4.png)
-![Application](gs5.png)
-![Application](gs6.png)
-![Application](gs7.png)
-![Application](gs8.png)
+![Application](src/gs1.png)
+![Application](src/gs2.png)
+![Application](src/gs3.png)
+![Application](src/gs4.png)
+![Application](src/gs5.png)
+![Application](src/gs6.png)
+![Application](src/gs7.png)
+![Application](src/gs8.png)
