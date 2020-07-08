@@ -1,5 +1,4 @@
 import parser
-from math import *
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 import numpy as np
@@ -35,10 +34,10 @@ class AppGui:
         self.range_b = TextBox(self.app, grid=[1, 2], align="right", text=5, width=5)
         self.precision_text = Text(self.app, text= "Precision: ", grid=[0,3])
         self.precision_box = TextBox(self.app, grid=[1, 3], align="right", text=0.0001, width=10)
-        self.precision = self.precision_box.get()
+        self.precision = self.precision_box.value
         self.text_range_a = Text(self.app, text= "Start points: ", grid=[0,4], width=10)
         self.start_points = TextBox(self.app, grid= [1, 4], text= self.list_of_starters, width=20)
-        self.start = self.start_points.get()
+        self.start = self.start_points.value
         self.activate = PushButton(self.app, grid=[0, 5], text="Activate", command=self.activate_params, width=20, height=2)
         self.activate = PushButton(self.app, grid=[1, 5], text="Start", command=self.start_algorithm, width=20, height=2)
         self.iteration_points_text = Text(self.app, text="Iteration points", grid= [0, 6, 2, 6], align="top")
@@ -51,8 +50,8 @@ class AppGui:
         self.iterations = TextBox(self.app, grid=[4, 5], text= "1000", width=6, align="left")
         self.iterations_text = Text(self.app, grid=[3, 5], text="max iterations:", align="left")
         self.resolution = resolution
-        self.x_range = int(self.range_a.get())
-        self.y_range = int(self.range_b.get())
+        self.x_range = int(self.range_a.value)
+        self.y_range = int(self.range_b.value)
         self.x = np.linspace(self.x_range, self.y_range, resolution)  # 13
         self.y = np.linspace(self.x_range, self.y_range, resolution)
         self.black_mode = black_mode
@@ -64,12 +63,12 @@ class AppGui:
         self.start_app()
         self.formula = ""
     def append_to_list(self):
-        formula = self.input_box.get()
+        formula = self.input_box.value
         self.list_of_functions.append(formula)
         self.listbox.append(formula)
 
     def change_starters(self):
-        temp = self.start_points.get()
+        temp = self.start_points.value
         temp = temp[1:-1]
         temp = temp.split(",")
         temp_list = []
@@ -77,7 +76,7 @@ class AppGui:
             temp_list.append(float(element))
         temp = [float(i) for i in temp]
         print(temp)
-        self.start_points.set(temp)
+        self.start_points.value = temp
         self.list_of_starters = temp
 
     def count_variables(self):
@@ -92,13 +91,13 @@ class AppGui:
         return 10
 
     def activate_params(self):
-        self.x_range = int(self.range_a.get())
-        self.y_range = int(self.range_b.get())
+        self.x_range = int(self.range_a.value)
+        self.y_range = int(self.range_b.value)
         self.x = np.linspace(self.x_range, self.y_range, self.resolution)  # 13
         self.y = np.linspace(self.x_range, self.y_range, self.resolution)
-        self.start = self.start_points.get()
+        self.start = self.start_points.value
 
-        self.precision = self.precision_box.get()
+        self.precision = self.precision_box.value
         self.points_x.clear()
         self.points_y.clear()
         self.points_z.clear()
@@ -107,17 +106,17 @@ class AppGui:
         self.list_of_iterations.clear()
         self.list_of_results.clear()
         self.results_points_box.clear()
-        self.formula = self.input_box.get()
+        self.formula = self.input_box.value
 
     def start_algorithm(self):
         self.golden_search = Golden_search.GoldenSearch(self.x_range, self.y_range, self.list_of_starters,
                                                         float(self.precision), self.formula)
-        self.golden_search.test_search(int(self.iterations.get()), self.count_variables(), self.checkbox2.get_value())
+        self.golden_search.test_search(int(self.iterations.value), self.count_variables(), self.checkbox2.value)
         self.list_of_iterations = self.golden_search.points
         self.list_of_results = self.golden_search.results_of_function
         self.iterations_to_box()
         self.results_to_box()
-        self.number_of_iterations.set("{} iteracji".format(len(self.list_of_iterations)))
+        self.number_of_iterations = "{} iteracji".format(len(self.list_of_iterations))
 
     def iterations_to_box(self):
         for element in self.list_of_iterations:
@@ -133,8 +132,8 @@ class AppGui:
     def random_start_points(self):
         temp = []
         for _ in range(self.count_variables()):
-            temp.append(round(random.uniform(float(self.range_a.get()), float(self.range_b.get())),3))
-        self.start_points.set(temp)
+            temp.append(round(random.uniform(float(self.range_a.value), float(self.range_b.value)),3))
+        self.start_points.value = temp
         self.list_of_starters = temp
 
     def replace_power_symbol(self, expression):
@@ -161,7 +160,7 @@ class AppGui:
         Z = self.compile(formula, X, Y)
         ax = plt.axes(projection='3d')
         ax = self.set_xyz_labels(ax)
-        if self.checkbox.get_value()==False:
+        if self.checkbox.value is False:
             ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap='viridis', edgecolor='black')
         else:
             ax.contour3D(X, Y, Z, 50, cmap='binary')
@@ -184,7 +183,7 @@ class AppGui:
         plt.show()
 
     def get_formula_and_refactor(self):
-        formula = self.input_box.get()
+        formula = self.input_box.value
         formula = self.replace_power_symbol(formula)
         formula = self.add_np_to_functions(formula)
         return formula
@@ -199,7 +198,7 @@ class AppGui:
         return self.create_contours(formula, self.x, self.y, self.list_of_iterations)
 
     def change(self, value):
-        self.input_box.set(value)
+        self.input_box.value = value
         self.function_plot.enabled = self.count_variables() == 2
         self.contour_plot.enabled = self.count_variables()  == 2
         self.checkbox.enabled = self.count_variables()  == 2
