@@ -160,7 +160,7 @@ class AppGui:
         Z = self.compile(formula, X, Y)
         ax = plt.axes(projection='3d')
         ax = self.set_xyz_labels(ax)
-        if self.checkbox.value is False:
+        if not self.checkbox.value:
             ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap='viridis', edgecolor='black')
         else:
             ax.contour3D(X, Y, Z, 50, cmap='binary')

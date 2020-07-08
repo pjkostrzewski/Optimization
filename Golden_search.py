@@ -1,8 +1,9 @@
-from math import sqrt
 import numpy as np
-import random
 import parser
+import random
+from math import sqrt
 from copy import deepcopy
+
 
 class GoldenSearch:
 
@@ -24,70 +25,15 @@ class GoldenSearch:
         self.results_of_function = []
 
     def calculate_function_result(self, number_of_variables):
+        """
+            if number_of_variables == 4:
+                x0 = float(last_element["x0"])
+                x1 = float(last_element["x1"])
+                etc ...
+        """
         last_element = self.points[-1]
-        if number_of_variables == 2:
-            x0 = float(last_element["x0"])
-            x1 = float(last_element["x1"])
-        if number_of_variables == 3:
-            x0 = float(last_element["x0"])
-            x1 = float(last_element["x1"])
-            x2 = float(last_element["x2"])
-        if number_of_variables == 4:
-            x0 = float(last_element["x0"])
-            x1 = float(last_element["x1"])
-            x2 = float(last_element["x2"])
-            x3 = float(last_element["x3"])
-        if number_of_variables == 5:
-            x0 = float(last_element["x0"])
-            x1 = float(last_element["x1"])
-            x2 = float(last_element["x2"])
-            x3 = float(last_element["x3"])
-            x4 = float(last_element["x4"])
-        if number_of_variables == 6:
-            x0 = float(last_element["x0"])
-            x1 = float(last_element["x1"])
-            x2 = float(last_element["x2"])
-            x3 = float(last_element["x3"])
-            x4 = float(last_element["x4"])
-            x5 = float(last_element["x5"])
-        if number_of_variables == 7:
-            x0 = float(last_element["x0"])
-            x1 = float(last_element["x1"])
-            x2 = float(last_element["x2"])
-            x3 = float(last_element["x3"])
-            x4 = float(last_element["x4"])
-            x5 = float(last_element["x5"])
-            x6 = float(last_element["x6"])
-        if number_of_variables == 8:
-            x0 = float(last_element["x0"])
-            x1 = float(last_element["x1"])
-            x2 = float(last_element["x2"])
-            x3 = float(last_element["x3"])
-            x4 = float(last_element["x4"])
-            x5 = float(last_element["x5"])
-            x6 = float(last_element["x6"])
-            x7 = float(last_element["x7"])
-        if number_of_variables == 9:
-            x0 = float(last_element["x0"])
-            x1 = float(last_element["x1"])
-            x2 = float(last_element["x2"])
-            x3 = float(last_element["x3"])
-            x4 = float(last_element["x4"])
-            x5 = float(last_element["x5"])
-            x6 = float(last_element["x6"])
-            x7 = float(last_element["x7"])
-            x8 = float(last_element["x8"])
-        if number_of_variables == 10:
-            x0 = float(last_element["x0"])
-            x1 = float(last_element["x1"])
-            x2 = float(last_element["x2"])
-            x3 = float(last_element["x3"])
-            x4 = float(last_element["x4"])
-            x5 = float(last_element["x5"])
-            x6 = float(last_element["x6"])
-            x7 = float(last_element["x7"])
-            x8 = float(last_element["x8"])
-            x9 = float(last_element["x9"])
+        for idx in range(number_of_variables):
+            exec(f"x{idx} = float(last_element['x{idx}'])")
         return eval(self.formula)
 
     def starters_to_dict_results(self, list_of_starters):
@@ -146,14 +92,14 @@ class GoldenSearch:
         self.results_of_function.append(self.calculate_function_result(number_of_variables))
         valid = 0
         for _ in range(iterations):
-            if flag == False:
+            if not flag:
                 break
             for key in self.results.keys():
                 counter += 1
                 self.one_variable_function(key, self.results)
                 piwot = (-1 + self.resphi*2) #(sqrt(5)-1)/2 #0.6180339887498949
                 piwot = piwot*(-1) if float(self.points[-1][key]) <= 0 else piwot
-                if dynamically == True:
+                if dynamically:
                     result = self.goldenSectionSearch(self.func,
                                                       float(self.points[-1][key])-2 if float(self.points[-1][key])-2 > self.a else self.a,
                                                       float(self.points[-1][key])+piwot,
@@ -173,7 +119,7 @@ class GoldenSearch:
                 if self.results_of_function[-2] == self.results_of_function[-1]:
                     valid += 1
                     del self.points[-1]
-                if valid >= 3*number_of_variables+1:
+                if valid >= 3 * number_of_variables + 1:
                     flag = False
                     break
                 # if abs(diff) <= self.absolute_precision:
